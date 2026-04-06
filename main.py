@@ -13,10 +13,21 @@ data_augmentation = tf.keras.Sequential([
 # 📦 Load dataset (only needed for class names)
 dataset = tf.keras.preprocessing.image_dataset_from_directory(
     "dataset",
+    validation_split=0.2,
+    subset="training",
+    seed=123,
     image_size=(224, 224),
     batch_size=8
 )
 
+val_dataset = tf.keras.preprocessing.image_dataset_from_directory(
+    "dataset",
+    validation_split=0.2,
+    subset="validation",
+    seed=123,
+    image_size=(224, 224),
+    batch_size=8
+)
 class_names = dataset.class_names
 print("Classes:", class_names)
 
@@ -43,6 +54,7 @@ else:
 
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Dense(len(class_names), activation='softmax')
 ])
 
@@ -52,7 +64,7 @@ else:
         metrics=['accuracy']
     )
 
-    model.fit(dataset, epochs=15)
+    model.fit(dataset, validation_data=val_dataset, epochs=15)
     model.save("plant_model.h5")
 
     print("✅ Model trained and saved!")
