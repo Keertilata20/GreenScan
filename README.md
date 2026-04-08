@@ -94,5 +94,3 @@ This project was inspired by a real-world problem:
 ---
 
 ## ⭐ Stay Tuned
-
-More updates coming soon as the project grows 🌿
